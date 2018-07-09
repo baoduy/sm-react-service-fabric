@@ -26,6 +26,7 @@ namespace Web
         {
             return new ServiceInstanceListener[]
             {
+                //Http endpoint
                 new ServiceInstanceListener(serviceContext =>
                     new KestrelCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
                     {
@@ -42,7 +43,25 @@ namespace Web
                                     .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.UseReverseProxyIntegration)
                                     .UseUrls(url)
                                     .Build();
-                    }))
+                    }),"ServiceEndpoint"),
+                //Https endpoint
+                new ServiceInstanceListener(serviceContext =>
+                    new KestrelCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
+                    {
+                        ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
+
+                        return new WebHostBuilder()
+                            .UseHttpSys()
+                            .ConfigureServices(
+                                services => services
+                                    .AddSingleton<StatelessServiceContext>(serviceContext))
+                            .UseContentRoot(Directory.GetCurrentDirectory())
+                            .UseWebRoot("wwwroot")
+                            .UseStartup<Startup>()
+                            .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.UseReverseProxyIntegration)
+                            .UseUrls(url)
+                            .Build();
+                    }),"ServiceHttpsEndpoint"),
             };
         }
     }

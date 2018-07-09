@@ -2,16 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Linq;
 
 namespace Web
 {
     public class Startup
     {
-        public const string _reservedProxyUrl = "/ReactJs/Web";
+        public const string ReservedProxyUrl = "/ReactJs/Web";
         //Uncomment this incase you use it.
         //public Startup(IConfiguration configuration)
         //{
@@ -67,7 +65,7 @@ namespace Web
             {
                 //Apply the Preserved Proxy if accessing by the Service Fabric Reserved Proxy
                 if (context.Request.Headers.TryGetValue("X-Forwarded-Host", out var url) && url.ToString().Contains("19081"))
-                    context.Request.PathBase = _reservedProxyUrl;
+                    context.Request.PathBase = ReservedProxyUrl;
 
                 await next();
             });

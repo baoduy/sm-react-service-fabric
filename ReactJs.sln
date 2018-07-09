@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB1C13B6-C954-4CB0-B698-42ED0764DF53}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\..\Users\Steven\Downloads\localhost.pfx = ..\..\..\Users\Steven\Downloads\localhost.pfx
 		README.md = README.md
 	EndProjectSection
 EndProject

@@ -9,6 +9,9 @@
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WebPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
+    <Policies>
+      <EndpointBindingPolicy EndpointRef="ServiceHttpsEndpoint" CertificateRef="SSL" />
+    </Policies>
   </ServiceManifestImport>
   <DefaultServices>
     <!-- The section below creates instances of service types, when an instance of this 
@@ -22,4 +25,8 @@
       </StatelessService>
     </Service>
   </DefaultServices>
+
+  <Certificates>
+    <SecretsCertificate Name="SSL" X509FindType="FindByThumbprint" X509FindValue="72bfba706ae7e0a9946892d9aae42c319d1d6988"/>
+  </Certificates>
 </ApplicationManifest>
