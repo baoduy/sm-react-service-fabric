@@ -25,8 +25,7 @@
       </StatelessService>
     </Service>
   </DefaultServices>
-
   <Certificates>
-    <SecretsCertificate Name="SSL" X509FindType="FindByThumbprint" X509FindValue="72bfba706ae7e0a9946892d9aae42c319d1d6988"/>
+    <SecretsCertificate X509FindValue="72bfba706ae7e0a9946892d9aae42c319d1d6988" Name="SSL" />
   </Certificates>
 </ApplicationManifest>

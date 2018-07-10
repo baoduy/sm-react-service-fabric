@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="PublishProfiles\Docker.SF.3Node.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Web\Web.csproj" />
