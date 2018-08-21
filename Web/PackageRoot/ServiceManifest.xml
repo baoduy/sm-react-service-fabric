@@ -29,8 +29,8 @@
       <!-- This endpoint is used by the communication listener to obtain the port on which to 
            listen. Please note that if your service is partitioned, this port is shared with 
            replicas of different partitions that are placed in your code. -->
-      <Endpoint Protocol="http" Name="ServiceEndpoint" Type="Input" Port="3000" />
-      <Endpoint Protocol="https" Name="ServiceHttpsEndpoint" Type="Input" Port="3001" CertificateRef="SSL" />
+      <Endpoint Protocol="http" Name="ServiceEndpoint" Type="Input" />
+      <Endpoint Protocol="https" Name="ServiceHttpsEndpoint" Type="Input" CertificateRef="SSL" />
     </Endpoints>
   </Resources>
 </ServiceManifest>

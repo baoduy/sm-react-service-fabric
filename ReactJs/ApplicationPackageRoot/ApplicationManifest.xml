@@ -26,6 +26,6 @@
     </Service>
   </DefaultServices>
   <Certificates>
-    <SecretsCertificate X509FindValue="72bfba706ae7e0a9946892d9aae42c319d1d6988" Name="SSL" />
+    <SecretsCertificate X509FindValue="72 bf ba 70 6a e7 e0 a9 94 68 92 d9 aa e4 2c 31 9d 1d 69 88" Name="SSL" />
   </Certificates>
 </ApplicationManifest>

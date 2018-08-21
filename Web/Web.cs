@@ -24,7 +24,7 @@ namespace Web
         /// <returns>The collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[]
+            return new[]
             {
                 //Http endpoint
                 new ServiceInstanceListener(serviceContext =>
@@ -36,7 +36,7 @@ namespace Web
                                     .UseKestrel()
                                     .ConfigureServices(
                                         services => services
-                                            .AddSingleton<StatelessServiceContext>(serviceContext))
+                                            .AddSingleton(serviceContext))
                                     .UseContentRoot(Directory.GetCurrentDirectory())
                                     .UseWebRoot("wwwroot")
                                     .UseStartup<Startup>()
@@ -54,7 +54,7 @@ namespace Web
                             .UseHttpSys()
                             .ConfigureServices(
                                 services => services
-                                    .AddSingleton<StatelessServiceContext>(serviceContext))
+                                    .AddSingleton(serviceContext))
                             .UseContentRoot(Directory.GetCurrentDirectory())
                             .UseWebRoot("wwwroot")
                             .UseStartup<Startup>()
