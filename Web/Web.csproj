@@ -29,24 +29,21 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <_SAP_Dist Include="$(SolutionDir)..\dist\*.*" />
     <_SAP_Img Include="$(SolutionDir)..\dist\img\*.*" />
-    <_SAP_Js Include="$(SolutionDir)..\dist\js\*.*" />
   </ItemGroup>
   
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
     <RemoveDir Directories="$(ProjectDir)wwwroot"></RemoveDir>
     <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)wwwroot"></Copy>
     <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)wwwroot\img"></Copy>
-    <Copy SourceFiles="@(_SAP_Js)" DestinationFolder="$(ProjectDir)wwwroot\js"></Copy>
   </Target>
 
-  <Target Name="PublishRunWebpack" Condition=" '$(Configuration)' == 'Release' " AfterTargets="ComputeFilesToPublish">
+  <Target Name="PublishRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
     <RemoveDir Directories="$(ProjectDir)wwwroot"></RemoveDir>
     <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)wwwroot"></Copy>
     <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)wwwroot\img"></Copy>
-    <Copy SourceFiles="@(_SAP_Js)" DestinationFolder="$(ProjectDir)wwwroot\js"></Copy>
-  </Target>
+  </Target>-->
 
 </Project>
