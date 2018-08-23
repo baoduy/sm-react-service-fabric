@@ -9,10 +9,7 @@ namespace Web.Controllers
     {
         private readonly IMemoryCache _cache;
 
-        public HomeController(IMemoryCache cache)
-        {
-            _cache = cache;
-        }
+        public HomeController(IMemoryCache cache) => _cache = cache;
 
         public async ValueTask<IActionResult> Index()
         {
