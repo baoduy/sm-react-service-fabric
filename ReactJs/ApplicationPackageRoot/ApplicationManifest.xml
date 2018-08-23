@@ -3,8 +3,8 @@
   <Parameters>
     <Parameter Name="Web_InstanceCount" DefaultValue="-1" />
     <Parameter Name="CertThumbprint" DefaultValue="72 bf ba 70 6a e7 e0 a9 94 68 92 d9 aa e4 2c 31 9d 1d 69 88" />
-    <Parameter Name="AccountName" DefaultValue="schrodersad\hoangd" />
-    <Parameter Name="AccountPassword" DefaultValue="Steven18q4" />
+    <Parameter Name="AccountName" DefaultValue="" />
+    <Parameter Name="AccountPassword" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
