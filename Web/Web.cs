@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using System;
 using System.Collections.Generic;
 using System.Fabric;
 using System.IO;
@@ -19,6 +20,7 @@ namespace Web
             : base(context)
         { }
 
+        #region Static Methods
         private static IWebHostBuilder CreateWebHostBuilder(StatelessServiceContext serviceContext, string url, AspNetCoreCommunicationListener listener)
             => new WebHostBuilder()
             .ConfigureServices(
@@ -29,6 +31,7 @@ namespace Web
             .UseStartup<Startup>()
             .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.UseReverseProxyIntegration)
             .UseUrls(url);
+
 
         private static X509Certificate2 GetCertificateFromStore(string subjectDistinguishedName)
         {
@@ -45,6 +48,7 @@ namespace Web
                 store.Close();
             }
         }
+        #endregion
 
         /// <summary>
         /// Optional override to create listeners (like tcp, http) for this service instance.
@@ -52,30 +56,47 @@ namespace Web
         /// <returns>The collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new[]
+            var config = new ConfigHelper(this.Context);
+
+            const string httpEndpointName = "ServiceEndpoint";
+            const string httpsEndpointName = "ServiceHttpsEndpoint";
+            var protocol = EndpointProtocols.Both;
+
+            if (Enum.TryParse(typeof(EndpointProtocols), config.GetValue("Default", "EndpointProtocol"), true,
+                out var obj))
             {
-                //Http endpoint
-                new ServiceInstanceListener(serviceContext =>
-                    new KestrelCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
+                protocol = (EndpointProtocols)obj;
+            }
+
+            if (protocol.HasFlag(EndpointProtocols.Http))
+            {
+                yield return new ServiceInstanceListener(serviceContext =>
+                    new KestrelCommunicationListener(serviceContext, httpEndpointName, (url, listener) =>
                     {
                         ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
 
-                        return CreateWebHostBuilder(serviceContext,url,listener)
-                                    .UseKestrel()
-                                    .Build();
+                        return CreateWebHostBuilder(serviceContext, url, listener)
+                            .UseKestrel()
+                            .Build();
 
-                    }),"ServiceEndpoint"),
+                    }), httpEndpointName);
+            }
+
+            if (protocol.HasFlag(EndpointProtocols.Https))
+            {
                 //Use either one of ServiceInstanceListener below for HTTPS
+
                 //Https endpoint using UseKestrel
-                //new ServiceInstanceListener(serviceContext =>
-                //    new KestrelCommunicationListener(serviceContext, "ServiceHttpsEndpoint", (url, listener) =>
+                //yield return new ServiceInstanceListener(serviceContext =>
+                //    new KestrelCommunicationListener(serviceContext, httpsEndpointName, (url, listener) =>
                 //    {
                 //        ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
 
-                //        return CreateWebHostBuilder(serviceContext,url,listener)
+                //        return CreateWebHostBuilder(serviceContext, url, listener)
                 //            .UseKestrel(opt =>
                 //            {
-                //                var port = serviceContext.CodePackageActivationContext.GetEndpoint("ServiceHttpsEndpoint").Port;
+                //                var port = serviceContext.CodePackageActivationContext
+                //                    .GetEndpoint("ServiceHttpsEndpoint").Port;
                 //                opt.Listen(IPAddress.IPv6Any, port, listenOptions =>
                 //                {
                 //                    listenOptions.UseHttps(GetCertificateFromStore("localhost"));
@@ -84,19 +105,20 @@ namespace Web
                 //            })
                 //            .Build();
 
-                //    }),"ServiceHttpsEndpoint"),
+                //    }), httpsEndpointName);
+
                 //Https endpoint using HttpSys
-                new ServiceInstanceListener(serviceContext =>
-                    new HttpSysCommunicationListener(serviceContext, "ServiceHttpsEndpoint", (url, listener) =>
+                yield return new ServiceInstanceListener(serviceContext =>
+                    new HttpSysCommunicationListener(serviceContext, httpsEndpointName, (url, listener) =>
                     {
                         ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
 
-                        return CreateWebHostBuilder(serviceContext,url,listener)
+                        return CreateWebHostBuilder(serviceContext, url, listener)
                             .UseHttpSys()
                             .Build();
 
-                    }),"ServiceHttpsEndpoint")
-            };
+                    }), httpsEndpointName);
+            }
         }
     }
 }

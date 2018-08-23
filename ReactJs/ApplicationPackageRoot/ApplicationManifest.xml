@@ -5,13 +5,23 @@
     <Parameter Name="CertThumbprint" DefaultValue="72 bf ba 70 6a e7 e0 a9 94 68 92 d9 aa e4 2c 31 9d 1d 69 88" />
     <Parameter Name="AccountName" DefaultValue="" />
     <Parameter Name="AccountPassword" DefaultValue="" />
+    <!--EndpointProtocol only accept Http,Https,Both-->
+    <Parameter Name="EndpointProtocol" DefaultValue="Both" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WebPkg" ServiceManifestVersion="1.0.0" />
-    <ConfigOverrides />
+    <ConfigOverrides>
+      <ConfigOverride Name="Config">
+        <Settings>
+          <Section Name="Default">
+            <Parameter Name="EndpointProtocol" Value="[EndpointProtocol]" />
+          </Section>
+        </Settings>
+      </ConfigOverride>
+    </ConfigOverrides>
     <Policies>
       <EndpointBindingPolicy EndpointRef="ServiceHttpsEndpoint" CertificateRef="SSL" />
     </Policies>

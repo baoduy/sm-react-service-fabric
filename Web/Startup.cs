@@ -44,6 +44,9 @@ namespace Web
                     "image/svg+xml"
                 };
             });
+
+            //Custom Services
+            //services.AddSingleton<ConfigHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
