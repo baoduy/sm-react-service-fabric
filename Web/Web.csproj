@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.2" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.HttpSys" Version="3.2.176" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.Kestrel" Version="3.2.176" />
   </ItemGroup>
@@ -30,7 +31,7 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
-  <!--<ItemGroup>
+  <ItemGroup>
     <_SAP_Dist Include="$(SolutionDir)..\dist\*.*" />
     <_SAP_Img Include="$(SolutionDir)..\dist\img\*.*" />
   </ItemGroup>
@@ -45,6 +46,6 @@
     <RemoveDir Directories="$(ProjectDir)wwwroot"></RemoveDir>
     <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)wwwroot"></Copy>
     <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)wwwroot\img"></Copy>
-  </Target>-->
+  </Target>
 
 </Project>

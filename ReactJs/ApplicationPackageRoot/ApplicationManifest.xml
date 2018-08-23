@@ -24,6 +24,7 @@
     </ConfigOverrides>
     <Policies>
       <EndpointBindingPolicy EndpointRef="ServiceHttpsEndpoint" CertificateRef="SSL" />
+      <!--<DefaultRunAsPolicy UserRef="svAccount" />-->
     </Policies>
   </ServiceManifestImport>
   <DefaultServices>
@@ -38,14 +39,12 @@
       </StatelessService>
     </Service>
   </DefaultServices>
-  <Principals>
+  <!--<Principals>
     <Users>
       <User Name="svAccount" AccountType="DomainUser" AccountName="[AccountName]" Password="[AccountPassword]" PasswordEncrypted="false" />
     </Users>
-  </Principals>
-  <Policies>
-    <DefaultRunAsPolicy UserRef="svAccount" />
-  </Policies>
+  </Principals>-->
+  <Policies />
   <Certificates>
     <EndpointCertificate X509FindValue="[CertThumbprint]" Name="SSL" />
   </Certificates>
