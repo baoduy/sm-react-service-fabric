@@ -12,14 +12,19 @@ Defiantly, If you are not using **Azure Service Fabric**. This folder shall be d
 
 ## SSL support
 
-1. Import `localhost.pfx` with password is `localhost`
+1. Import **localhost.pfx** with password is `localhost`. The thumbprint of this cert should be `72 bf ba 70 6a e7 e0 a9 94 68 92 d9 aa e4 2c 31 9d 1d 69 88`.
 2. Run the application and see the result.
 
-If you want to change to your SSL just simply update the thumbprint in the `ApplicationManifest.xml` in the bellow section
+If you want to change to your SSL just simply update the thumbprint in the `ApplicationManifest.xml` in the bellow section. You also able to parameter it for multi environments deployment purpose.
 
 ```xml
  <Certificates>
-    <SecretsCertificate Name="SSL" X509FindType="FindByThumbprint" X509FindValue="[YOUR_THUMBPRINT]"/>
+    <EndpointCertificate Name="SSL" X509FindType="FindByThumbprint" X509FindValue="[YOUR_THUMBPRINT]"/>
  </Certificates>
 ```
-for more details please refer here [drunkcoding.net](http://drunkcoding.net/enable-https-endpoint-for-service-fabric-application/)
+
+3. In this project I have added the sample code for hosting SSL with both **HttpSys** and **Kestrel** for reference in the `Web.cs` file in Web project.
+
+## DrunkCoding Topic
+
+For more details about the hosting HTTPS application on Service Fabric please refer here [drunkcoding.net](http://drunkcoding.net/enable-https-endpoint-for-service-fabric-application/)
