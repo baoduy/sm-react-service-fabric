@@ -1,4 +1,7 @@
-#The Deploy-FabricApplication.ps1 is in the Service Fabric Projects. Need to embeded along with the package.
+# This script requires Service Fabric SKD to be installed.
+# The deployment script: Deploy new or upgrade the exisiting application.
+# The Deploy-FabricApplication.ps1 is in the Service Fabric Projects. Need to embeded along with the package.
+
 $DeployFabricApplicationFilePath = ".\Deploy-FabricApplication.ps1"
 
 $ServiceFabricConnectionEndpoint = 'localhost:19000'
@@ -20,7 +23,7 @@ if([string]::IsNullOrEmpty( $Thumbprint)){
 }else{
 	Write-Verbose "Connect to $ServiceFabricConnectionEndpoint using Certificate"
 
-	Connect-ServiceFabricCluster -ConnectionEndpoint $ServiceFabricConnectionEndpoint `
+	$ConnectionResult = Connect-ServiceFabricCluster -ConnectionEndpoint $ServiceFabricConnectionEndpoint `
           -KeepAliveIntervalInSec 10 `
           -X509Credential -ServerCertThumbprint $Thumbprint `
           -FindType FindByThumbprint -FindValue $Thumbprint `

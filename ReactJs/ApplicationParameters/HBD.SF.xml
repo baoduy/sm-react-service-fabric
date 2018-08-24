@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/ReactJs" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="Web_InstanceCount" Value="1" />
+	<Parameter Name="CertThumbprint" Value="21 ce 44 e7 49 5c ee 56 9b 11 f5 88 27 e3 b8 23 b9 29 7f f7" />
+    <Parameter Name="AccountName" Value="hbd.net\SFAdmin" />
+    <Parameter Name="AccountPassword" Value="" />
+    <!--EndpointProtocol only accept Http,Https,Both-->
+    <Parameter Name="EndpointProtocol" Value="Both" />
+  </Parameters>
+</Application>
