@@ -45,7 +45,7 @@ namespace Web
         {
             if (this.IsEnabled())
             {
-                string finalMessage = string.Format(message, args);
+                var finalMessage = string.Format(message, args);
                 Message(finalMessage);
             }
         }
@@ -66,7 +66,7 @@ namespace Web
             if (this.IsEnabled())
             {
 
-                string finalMessage = string.Format(message, args);
+                var finalMessage = string.Format(message, args);
                 ServiceMessage(
                     serviceContext.ServiceName.ToString(),
                     serviceContext.ServiceTypeName,
@@ -154,13 +154,13 @@ namespace Web
         #region Private methods
         private static long GetReplicaOrInstanceId(ServiceContext context)
         {
-            StatelessServiceContext stateless = context as StatelessServiceContext;
+            var stateless = context as StatelessServiceContext;
             if (stateless != null)
             {
                 return stateless.InstanceId;
             }
 
-            StatefulServiceContext stateful = context as StatefulServiceContext;
+            var stateful = context as StatefulServiceContext;
             if (stateful != null)
             {
                 return stateful.ReplicaId;

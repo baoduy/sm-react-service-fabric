@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ReactJsType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="Web_ASPNETCORE_ENVIRONMENT" DefaultValue="" />
     <Parameter Name="Web_InstanceCount" DefaultValue="-1" />
     <Parameter Name="CertThumbprint" DefaultValue="72 bf ba 70 6a e7 e0 a9 94 68 92 d9 aa e4 2c 31 9d 1d 69 88" />
     <Parameter Name="AccountName" DefaultValue="" />
@@ -22,9 +23,11 @@
         </Settings>
       </ConfigOverride>
     </ConfigOverrides>
+    <EnvironmentOverrides CodePackageRef="code">
+      <EnvironmentVariable Name="ASPNETCORE_ENVIRONMENT" Value="[Web_ASPNETCORE_ENVIRONMENT]" />
+    </EnvironmentOverrides>
     <Policies>
       <EndpointBindingPolicy EndpointRef="ServiceHttpsEndpoint" CertificateRef="SSL" />
-      <!--<DefaultRunAsPolicy UserRef="svAccount" />-->
     </Policies>
   </ServiceManifestImport>
   <DefaultServices>

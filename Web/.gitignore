@@ -28,9 +28,7 @@ Obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/
-/wwwroot/*
-
-/yarn.lock
+/wwwroot/dist/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -180,7 +178,7 @@ ClientBin/
 *~
 *.dbmdl
 *.dbproj.schemaview
-#*.pfx
+*.pfx
 *.publishsettings
 orleans.codegen.cs
 

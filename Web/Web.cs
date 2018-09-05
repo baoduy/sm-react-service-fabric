@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Collections.Generic;
+using System.Fabric;
+using System.IO;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Fabric;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Web
 {
@@ -23,14 +24,13 @@ namespace Web
         #region Static Methods
         private static IWebHostBuilder CreateWebHostBuilder(StatelessServiceContext serviceContext, string url, AspNetCoreCommunicationListener listener)
             => new WebHostBuilder()
-            .ConfigureServices(
-                services => services
-                    .AddSingleton(serviceContext))
-            .UseContentRoot(Directory.GetCurrentDirectory())
-            .UseWebRoot("wwwroot")
-            .UseStartup<Startup>()
-            .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.UseReverseProxyIntegration)
-            .UseUrls(url);
+                .ConfigureServices(
+                    services => services
+                        .AddSingleton(serviceContext))
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseStartup<Startup>()
+                .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.UseReverseProxyIntegration)
+                .UseUrls(url);
 
 
         private static X509Certificate2 GetCertificateFromStore(string subjectDistinguishedName)

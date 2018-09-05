@@ -5,47 +5,57 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <IsServiceFabricServiceProject>True</IsServiceFabricServiceProject>
     <RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+    <TargetLatestRuntimePatch>False</TargetLatestRuntimePatch>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.HttpSys" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.2" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.HttpSys" Version="3.2.176" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.Kestrel" Version="3.2.176" />
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\build\" />
     <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <_SAP_Dist Include="$(SolutionDir)..\dist\*.*" />
     <_SAP_Img Include="$(SolutionDir)..\dist\img\*.*" />
+    <_SAP_manifest Include="$(ProjectDir)\ClientApp\public\*.*" />
   </ItemGroup>
-  
+
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
-    <RemoveDir Directories="$(ProjectDir)wwwroot"></RemoveDir>
-    <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)wwwroot"></Copy>
-    <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)wwwroot\img"></Copy>
+    <RemoveDir Directories="$(ProjectDir)ClientApp\build"></RemoveDir>
+    <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)ClientApp\build"></Copy>
+    <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)ClientApp\build\img"></Copy>
+    <Copy SourceFiles="@(_SAP_manifest)" DestinationFolder="$(ProjectDir)ClientApp\build"></Copy>
   </Target>
 
-  <Target Name="PublishRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
-    <RemoveDir Directories="$(ProjectDir)wwwroot"></RemoveDir>
-    <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)wwwroot"></Copy>
-    <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)wwwroot\img"></Copy>
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <!--<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />-->
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)build\**; $(SpaRoot)build-ssr\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
   </Target>
 
 </Project>

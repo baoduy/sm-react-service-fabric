@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Fabric;
 using System.Fabric.Description;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Web
 {
@@ -11,7 +14,7 @@ namespace Web
 
         public ConfigHelper(ServiceContext context, string name = "Config")
         {
-            _context = context??throw new ArgumentNullException(nameof(context));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
@@ -21,7 +24,7 @@ namespace Web
         public ConfigurationSection GetSection(string sectionName)
             => GetConfigurationPackage().Settings.Sections[sectionName];
 
-        public virtual string GetValue(string sectionName,string name)
+        public virtual string GetValue(string sectionName, string name)
             => GetSection(sectionName).Parameters[name].Value;
     }
 }

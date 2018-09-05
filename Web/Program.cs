@@ -1,7 +1,6 @@
 ﻿using Microsoft.ServiceFabric.Services.Runtime;
 using System;
 using System.Diagnostics;
-using System.Fabric;
 using System.Threading;
 
 namespace Web
@@ -31,7 +30,7 @@ namespace Web
             catch (Exception e)
             {
                 ServiceEventSource.Current.ServiceHostInitializationFailed(e.ToString());
-                throw new FabricException(e.Message, e);
+                throw;
             }
         }
     }
