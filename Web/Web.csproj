@@ -35,7 +35,7 @@
     <_SAP_manifest Include="$(ProjectDir)\ClientApp\public\*.*" />
   </ItemGroup>
 
-  <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
+  <Target Name="DebugRunWebpack" BeforeTargets="Build">
     <RemoveDir Directories="$(ProjectDir)ClientApp\build"></RemoveDir>
     <Copy SourceFiles="@(_SAP_Dist)" DestinationFolder="$(ProjectDir)ClientApp\build"></Copy>
     <Copy SourceFiles="@(_SAP_Img)" DestinationFolder="$(ProjectDir)ClientApp\build\img"></Copy>

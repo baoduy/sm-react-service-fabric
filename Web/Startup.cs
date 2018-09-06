@@ -1,5 +1,7 @@
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +10,8 @@ namespace Web
 {
     public class Startup
     {
+        public const string ReservedProxyUrl = "/ReactJs/Web";
+
         public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
@@ -73,15 +77,41 @@ namespace Web
             //        template: "{controller}/{action=Index}/{id?}");
             //});
 
-            app.UseSpa(spa =>
+            //Enable Reserved Proxy and handle transform
+            app.Use(async (context, next) =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                if (!context.Request.Headers.TryGetValue("X-Forwarded-Host", out var url) ||
+                    !url.ToString().Contains("19081"))
+                {
+                    await next();
+                    return;
+                }
 
-                //if (env.IsDevelopment())
-                //{
-                //    spa.UseReactDevelopmentServer(npmScript: "start");
-                //}
+                //Apply the Preserved Proxy if accessing by the Service Fabric Reserved Proxy
+                context.Request.PathBase = ReservedProxyUrl;
+
+                var existingBody = context.Response.Body;
+
+                using (var newBody = new MemoryStream())
+                {
+                    context.Response.Body = newBody;
+
+                    await next();
+
+                    newBody.Seek(0, SeekOrigin.Begin);
+                    var body = new StreamReader(newBody).ReadToEnd();
+                    body = body.Replace("src=\"/", $"src =\"{ReservedProxyUrl}/")
+                        .Replace("src='/", $"src ='{ReservedProxyUrl}/")
+                        //href
+                        .Replace("href=\"/", $"href=\"{ReservedProxyUrl}/")
+                        .Replace("href='/", $"href='{ReservedProxyUrl}/");
+
+                    context.Response.Body = existingBody;
+                    await context.Response.WriteAsync(body);
+                }
             });
+
+            app.UseSpa(spa => { });
         }
     }
 }
