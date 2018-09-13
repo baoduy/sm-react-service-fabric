@@ -77,39 +77,17 @@ namespace Web
             //        template: "{controller}/{action=Index}/{id?}");
             //});
 
-            //Enable Reserved Proxy and handle transform
-            app.Use(async (context, next) =>
-            {
-                if (!context.Request.Headers.TryGetValue("X-Forwarded-Host", out var url) ||
-                    !url.ToString().Contains("19081"))
-                {
-                    await next();
-                    return;
-                }
+            //Use body Transform
+            app.UseBodyTransformer("text/html", body =>
+                    body.Replace("src=\"/", $"src =\"{ReservedProxyUrl}/")
+                    .Replace("src='/", $"src ='{ReservedProxyUrl}/")
+                    //href
+                    .Replace("href=\"/", $"href=\"{ReservedProxyUrl}/")
+                    .Replace("href='/", $"href='{ReservedProxyUrl}/"),
 
-                //Apply the Preserved Proxy if accessing by the Service Fabric Reserved Proxy
-                context.Request.PathBase = ReservedProxyUrl;
-
-                var existingBody = context.Response.Body;
-
-                using (var newBody = new MemoryStream())
-                {
-                    context.Response.Body = newBody;
-
-                    await next();
-
-                    newBody.Seek(0, SeekOrigin.Begin);
-                    var body = new StreamReader(newBody).ReadToEnd();
-                    body = body.Replace("src=\"/", $"src =\"{ReservedProxyUrl}/")
-                        .Replace("src='/", $"src ='{ReservedProxyUrl}/")
-                        //href
-                        .Replace("href=\"/", $"href=\"{ReservedProxyUrl}/")
-                        .Replace("href='/", $"href='{ReservedProxyUrl}/");
-
-                    context.Response.Body = existingBody;
-                    await context.Response.WriteAsync(body);
-                }
-            });
+                //When 
+                context => context.Request.Headers.TryGetValue("X-Forwarded-Host", out var url)
+                           && url.ToString().Contains("19081"));
 
             app.UseSpa(spa => { });
         }
